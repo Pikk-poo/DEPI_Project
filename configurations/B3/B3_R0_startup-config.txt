@@ -38,6 +38,20 @@ spanning-tree mode pvst
 !
 !
 !
+interface Tunnel0
+ ip address 31.0.0.3 255.0.0.0
+ mtu 1476
+ tunnel source GigabitEthernet0/3/0
+ tunnel destination 11.0.0.1
+!
+!
+interface Tunnel1
+ ip address 32.0.0.3 255.0.0.0
+ mtu 1476
+ tunnel source GigabitEthernet0/3/0
+ tunnel destination 12.0.0.1
+!
+!
 interface GigabitEthernet0/0
  no ip address
  duplex auto
@@ -67,9 +81,14 @@ router ospf 1
  log-adjacency-changes
  passive-interface default
  no passive-interface GigabitEthernet0/1
+ no passive-interface Tunnel0
+ no passive-interface Tunnel1
+ network 31.0.0.0 0.255.255.255 area 0
+ network 32.0.0.0 0.255.255.255 area 0
 !
 ip classless
 ip route 0.0.0.0 0.0.0.0 30.0.0.2 
+ip route 192.168.0.0 255.255.255.0 31.0.0.1 
 !
 ip flow-export version 9
 !
